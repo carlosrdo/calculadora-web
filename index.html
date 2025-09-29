@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Científica Estilo Casio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="display-container">
+            <input type="text" id="display" readonly>
+        </div>
+        <div class="buttons">
+            <button class="function-button" onclick="shift()">Shift</button>
+            <button class="function-button" onclick="alpha()">Alpha</button>
+            <button class="function-button" onclick="trig('sin')">sin</button>
+            <button class="function-button" onclick="trig('cos')">cos</button>
+            <button class="function-button" onclick="trig('tan')">tan</button>
+
+            <button class="function-button" onclick="logarithm('log')">log</button>
+            <button class="function-button" onclick="logarithm('ln')">ln</button>
+            <button class="number-button" onclick="appendToDisplay('(')">(</button>
+            <button class="number-button" onclick="appendToDisplay(')')">)</button>
+            <button class="function-button" onclick="power('2')">x²</button>
+
+            <button class="number-button" onclick="appendToDisplay('7')">7</button>
+            <button class="number-button" onclick="appendToDisplay('8')">8</button>
+            <button class="number-button" onclick="appendToDisplay('9')">9</button>
+            <button class="operator-button" onclick="deleteLast()">DEL</button>
+            <button class="ac-button" onclick="clearDisplay()">AC</button>
+
+            <button class="number-button" onclick="appendToDisplay('4')">4</button>
+            <button class="number-button" onclick="appendToDisplay('5')">5</button>
+            <button class="number-button" onclick="appendToDisplay('6')">6</button>
+            <button class="operator-button" onclick="appendToDisplay('*')">×</button>
+            <button class="operator-button" onclick="appendToDisplay('/')">÷</button>
+
+            <button class="number-button" onclick="appendToDisplay('1')">1</button>
+            <button class="number-button" onclick="appendToDisplay('2')">2</button>
+            <button class="number-button" onclick="appendToDisplay('3')">3</button>
+            <button class="operator-button" onclick="appendToDisplay('+')">+</button>
+            <button class="operator-button" onclick="appendToDisplay('-')">-</button>
+
+            <button class="number-button" onclick="appendToDisplay('0')">0</button>
+            <button class="number-button" onclick="appendToDisplay('.')">.</button>
+            <button class="function-button" onclick="power('10')">10^x</button>
+            <button class="function-button" onclick="answer()">Ans</button>
+            <button class="equals-button" onclick="calculate()">=</button>
+        </div>
+    </div>
+    <script src="calculator.js"></script>
+</body>
+</html>
