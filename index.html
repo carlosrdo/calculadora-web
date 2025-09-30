@@ -1,55 +1,126 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Científica Estilo Casio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WEB-CALC fx-AI</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="calculator">
-        <div class="display-container">
-            <input type="text" id="display" readonly>
-        </div>
-        <div class="buttons">
-            <button class="function-button" onclick="shift()">Shift</button>
-            <button class="function-button" onclick="alpha()">Alpha</button>
-            <button class="function-button" onclick="trig('sin')">sin</button>
-            <button class="function-button" onclick="trig('cos')">cos</button>
-            <button class="function-button" onclick="trig('tan')">tan</button>
-
-            <button class="function-button" onclick="logarithm('log')">log</button>
-            <button class="function-button" onclick="logarithm('ln')">ln</button>
-            <button class="number-button" onclick="appendToDisplay('(')">(</button>
-            <button class="number-button" onclick="appendToDisplay(')')">)</button>
-            <button class="function-button" onclick="power('2')">x²</button>
-
-            <button class="number-button" onclick="appendToDisplay('7')">7</button>
-            <button class="number-button" onclick="appendToDisplay('8')">8</button>
-            <button class="number-button" onclick="appendToDisplay('9')">9</button>
-            <button class="operator-button" onclick="deleteLast()">DEL</button>
-            <button class="ac-button" onclick="clearDisplay()">AC</button>
-
-            <button class="number-button" onclick="appendToDisplay('4')">4</button>
-            <button class="number-button" onclick="appendToDisplay('5')">5</button>
-            <button class="number-button" onclick="appendToDisplay('6')">6</button>
-            <button class="operator-button" onclick="appendToDisplay('*')">×</button>
-            <button class="operator-button" onclick="appendToDisplay('/')">÷</button>
-
-            <button class="number-button" onclick="appendToDisplay('1')">1</button>
-            <button class="number-button" onclick="appendToDisplay('2')">2</button>
-            <button class="number-button" onclick="appendToDisplay('3')">3</button>
-            <button class="operator-button" onclick="appendToDisplay('+')">+</button>
-            <button class="operator-button" onclick="appendToDisplay('-')">-</button>
-
-            <button class="number-button" onclick="appendToDisplay('0')">0</button>
-            <button class="number-button" onclick="appendToDisplay('.')">.</button>
-            <button class="function-button" onclick="power('10')">10^x</button>
-            <button class="function-button" onclick="answer()">Ans</button>
-            <button class="equals-button" onclick="calculate()">=</button>
-        </div>
+<main class="shell" role="application" aria-label="Calculadora Casio fx-82 con modo CSV">
+  <!-- Cabecera -->
+  <header class="head">
+    <div class="brand">
+      <span class="casio" aria-label="CASIO">CASIO</span>
+      <div class="model">
+        <small>WEB-CALC</small>
+        <strong>fx-AI</strong>
+      </div>
     </div>
-    <script src="calculator.js"></script>
+
+    <div class="topbar">
+      <div class="lcd-slot" aria-hidden="true"></div>
+      <button type="button" id="toggle-mode" class="ghost" title="Cambiar a Modo CSV (Alt+C)" aria-pressed="false">
+        <span class="ico">&#x21BB;</span> <span id="toggle-label">CSV Mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Panel CALCULADORA -->
+  <section id="panel-calc" class="panel visible" aria-label="Panel calculadora">
+    <div class="lcd">
+      <input id="screen" class="screen" inputmode="decimal" aria-label="Pantalla de entrada" />
+      <div class="sub">
+        <h2 id="info" class="grande" title="Info sobre el número">Info sobre el número</h2>
+      </div>
+    </div>
+
+    <!-- Fila de funciones pequeñas -->
+    <div class="row smalls" role="group" aria-label="Funciones avanzadas">
+      <button type="button" class="btn mini" data-action="abs"  title="Valor absoluto (Alt+B)">|x|</button>
+      <button type="button" class="btn mini" data-action="cube" title="Elevar al cubo (Alt+3)">x³</button>
+      <button type="button" class="btn mini" data-action="pow"  title="Potencia xʸ (Alt+Y)">xʸ</button>
+      <button type="button" class="btn mini" data-action="log"  title="Logaritmo (Alt+L)">Log</button>
+    </div>
+
+    <!-- Teclado -->
+    <div class="grid" id="keypad">
+      <button type="button" class="btn danger" data-action="ac" title="Borrar todo (Esc)">AC</button>
+      <button type="button" class="btn" data-action="sqrt" title="Raíz cuadrada (Alt+R)">√</button>
+      <button type="button" class="btn" data-action="sq" title="Cuadrado (Alt+Q)">x²</button>
+      <button type="button" class="btn op" data-op="divide" title="Dividir (/)">÷</button>
+
+      <button type="button" class="btn" data-digit="7">7</button>
+      <button type="button" class="btn" data-digit="8">8</button>
+      <button type="button" class="btn" data-digit="9">9</button>
+      <button type="button" class="btn op" data-op="multiply" title="Multiplicar (*)">×</button>
+
+      <button type="button" class="btn" data-digit="4">4</button>
+      <button type="button" class="btn" data-digit="5">5</button>
+      <button type="button" class="btn" data-digit="6">6</button>
+      <button type="button" class="btn op" data-op="minus" title="Restar (-)">−</button>
+
+      <button type="button" class="btn" data-digit="1">1</button>
+      <button type="button" class="btn" data-digit="2">2</button>
+      <button type="button" class="btn" data-digit="3">3</button>
+      <button type="button" class="btn op" data-op="plus" title="Sumar (+)">+</button>
+
+      <button type="button" class="btn wide" data-digit="0">0</button>
+      <button type="button" class="btn" data-action="dot" title="Coma decimal (.)">.</button>
+      <button type="button" class="btn op strong" data-action="eq" title="Igual (=)">=</button>
+      <button type="button" class="btn" data-action="fact" title="Factorial (Alt+F)">x!</button>
+    </div>
+
+    <div class="footer-controls">
+      <button type="button" id="modulo" class="btn full" data-action="mod" title="Módulo (Alt+M)">Módulo</button>
+      <button type="button" id="show-logs" class="btn full ghost" title="Ver errores registrados">Ver Errores</button>
+      <a id="download-logs" class="btn ghost full" href="#" download="logs_calculadora.txt" hidden>Descargar Logs</a>
+    </div>
+  </section>
+
+  <!-- Panel CSV -->
+  <section id="panel-csv" class="panel" aria-label="Panel modo CSV" aria-hidden="true">
+    <div class="card">
+      <div class="card-head">
+        <span class="prompt">▸_</span>
+        <div>
+          <h3>Modo CSV</h3>
+          <p>Opere con listas de números. El resultado aparece abajo.</p>
+        </div>
+      </div>
+
+      <textarea id="csv-input" class="csvarea" placeholder="1, 2, 3, 4, 5" aria-label="Lista CSV"></textarea>
+
+      <div class="csv-grid">
+        <button type="button" class="btn dark" data-csv="sum">Sumatorio</button>
+        <button type="button" class="btn dark" data-csv="avg">Media</button>
+        <button type="button" class="btn dark" data-csv="sort">Ordenar</button>
+        <button type="button" class="btn dark" data-csv="rev">Revertir</button>
+        <button type="button" class="btn dark danger" data-csv="pop">Quitar Último</button>
+      </div>
+
+      <div class="csv-advanced">
+        <input id="csv-index" class="csvindex" inputmode="numeric" placeholder="Índice a quitar (opcional)" aria-label="Índice a quitar" />
+        <button type="button" class="btn dark" data-csv="removeAt">Quitar por índice</button>
+      </div>
+
+      <div class="lcd csv-output">
+        <output id="csv-output" aria-live="polite">Introduzca valores separados por comas</output>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Modal de Logs -->
+<dialog id="logs-modal" class="modal" aria-label="Registro de errores">
+  <h3>Registro de errores</h3>
+  <ol id="logs-list" class="logs"></ol>
+  <div class="modal-actions">
+    <button type="button" class="btn ghost" id="close-logs">Cerrar</button>
+    <button type="button" class="btn" id="export-logs">Exportar</button>
+  </div>
+</dialog>
+
+<script src="script.js"></script>
 </body>
 </html>
