@@ -174,33 +174,43 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   // ---------- Teclado ----------
-  on(window, 'keydown', (e) => {
-    if (e.key === 'Escape') { const b = $('[data-action="ac"]'); b && b.click(); return; }
-    if (e.key === 'Enter' || e.key === '=') { const b = $('[data-action="eq"]'); b && b.click(); return; }
-    if ('0123456789'.includes(e.key)) { screen.value += e.key; return; }
-    if (e.key === '.') { const b = $('[data-action="dot"]'); b && b.click(); }
+on(window, 'keydown', (e) => {
+  const ae = document.activeElement;
+  const isEditable = ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable);
+  const typingOutsideScreen = isEditable && ae !== screen; // p.ej., textarea CSV
 
-    if (e.key === '+') { const b = $('[data-op="plus"]'); b && b.click(); }
-    if (e.key === '-') { const b = $('[data-op="minus"]'); b && b.click(); }
-    if (e.key === '*') { const b = $('[data-op="multiply"]'); b && b.click(); }
-    if (e.key === '/') { const b = $('[data-op="divide"]'); b && b.click(); }
+  // Si estás tecleando en otro campo (CSV, etc.), no tocar la calculadora
+  // (dejamos pasar solo Alt-atajos y Escape)
+  if (typingOutsideScreen && !e.altKey && e.key !== 'Escape') return;
 
-    if (e.altKey) {
-      const map = {
-        c: () => toggleBtn && toggleBtn.click(),
-        q: () => $('[data-action="sq"]')?.click(),
-        r: () => $('[data-action="sqrt"]')?.click(),
-        '3': () => $('[data-action="cube"]')?.click(),
-        f: () => $('[data-action="fact"]')?.click(),
-        m: () => $('[data-action="mod"]')?.click(),
-        l: () => $('[data-action="log"]')?.click(),
-        y: () => $('[data-action="pow"]')?.click(),
-        b: () => $('[data-action="abs"]')?.click(),
-      };
-      const f = map[e.key.toLowerCase()];
-      if (f) { e.preventDefault(); f(); }
-    }
-  });
+  const press = (sel) => { const b = $(sel); if (b) { e.preventDefault(); b.click(); } };
+
+  if (e.key === 'Escape') return press('[data-action="ac"]');
+  if (e.key === 'Enter' || e.key === '=') return press('[data-action="eq"]');
+
+  // Escribir números “controlados” en la pantalla y evitar la doble escritura
+  if ('0123456789'.includes(e.key)) { 
+    e.preventDefault(); 
+    screen.value += e.key; 
+    return; 
+  }
+  if (e.key === '.') return press('[data-action="dot"]');
+
+  if (e.key === '+') return press('[data-op="plus"]');
+  if (e.key === '-') return press('[data-op="minus"]');
+  if (e.key === '*') return press('[data-op="multiply"]');
+  if (e.key === '/') return press('[data-op="divide"]');
+
+  if (e.altKey) {
+    const map = {
+      c:'#toggle-mode', q:'[data-action="sq"]', r:'[data-action="sqrt"]',
+      '3':'[data-action="cube"]', f:'[data-action="fact"]', m:'[data-action="mod"]',
+      l:'[data-action="log"]', y:'[data-action="pow"]', b:'[data-action="abs"]'
+    };
+    const sel = map[e.key.toLowerCase()];
+    if (sel) return press(sel);
+  }
+});
 
   // ---------- Toggle Calculator / CSV ----------
   on(toggleBtn, 'click', () => {
